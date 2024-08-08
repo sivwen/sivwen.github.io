@@ -43,8 +43,26 @@
             margin-bottom: auto;
         }
         .custom-indent {
-            margin-left: 42px;
+            margin-left: 51px;
         }
+#skills ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none; /* 기본 리스트 스타일 제거 */
+}
+
+.skill-item {
+    background-color: #f0f0f0; /* 원하는 배경 색상 */
+    border-radius: 5px; /* 둥근 모서리 */
+    padding: 5px 10px; /* 내부 여백 */
+    margin-bottom: 10px; /* 항목 간 간격 (수직 간격) */
+}
+
+.skill-item strong {
+    background-color: #e0e0e0; /* '강조' 텍스트의 배경 색상 */
+    border-radius: 3px; /* 둥근 모서리 */
+    padding: 2px 5px; /* 강조 텍스트의 내부 여백 */
+}
     </style>
 </head>
 
@@ -111,13 +129,14 @@
                     기술 스택
                 </h2>
                 <ul class="list-unstyled">
-                    <li><strong>프로그래밍 언어:</strong> Python</li>
-                    <li><strong>프레임워크:</strong></li>
-                    <li><strong>데이터베이스:</strong> Oracle</li>
-                    <li><strong>도구:</strong> Git, Docker</li>
-                    <li><strong>그외:</strong> AI 개발 환경 구축(Pytorch, Rocm)
+                    <li class="skill-item"><strong>프로그래밍 언어</strong>: Python</li>
+                    <li class="skill-item"><strong>프레임워크</strong>: </li>
+                    <li class="skill-item"><strong>데이터베이스</strong>: Oracle</li>
+                    <li class="skill-item"><strong>도구</strong>: Git, Docker</li>
+                    <li class="skill-item"><strong>그외</strong>: AI 개발 환경 구축(Pytorch, Rocm)
                         <br>
-                        <span class ="custom-indent">AI 활용 프로그램 환경 구축(Stable Diffusion, text-generation-webui 등)</span> </li>
+                        <span class="custom-indent">AI 활용 프로그램 환경 구축(Stable Diffusion, text-generation-webui 등)</span>
+                    </li>
                 </ul>
             </article>
 
