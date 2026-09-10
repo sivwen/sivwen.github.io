@@ -1,0 +1,56 @@
+name: Elin Luck v3.50 inspect
+
+on:
+  push:
+    branches: ["elin-luck-v350-build"]
+    paths:
+      - "elin-v350/**"
+      - ".github/workflows/elin-v350-inspect.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: elin-luck-v350-build
+      - name: Reconstruct v3.49 DLL
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p elin-v350/work
+          cat elin-v350/input/chunk_*.b64 | base64 -d | gzip -dc > elin-v350/work/ElonaLuckForElin-v3.49.dll
+          echo "2412959386c4a271438b47bdb9483c41a08636b2623914c8b4f3053ac5170ec2  elin-v350/work/ElonaLuckForElin-v3.49.dll" | sha256sum -c -
+          ls -l elin-v350/work/ElonaLuckForElin-v3.49.dll
+      - name: Install ILSpy command line
+        shell: bash
+        run: |
+          set -euo pipefail
+          dotnet tool install --global ilspycmd
+          echo "$HOME/.dotnet/tools" >> "$GITHUB_PATH"
+      - name: Decompile
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p elin-v350/work/decompiled
+          "$HOME/.dotnet/tools/ilspycmd" -p -o elin-v350/work/decompiled elin-v350/work/ElonaLuckForElin-v3.49.dll
+      - name: Print relevant registration source
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo '===== FILES CONTAINING HARD ISOLATION ====='
+          grep -RIl "BETTER-SLIME-HARD-ISOLATION\|PostDeathBonusPatch" elin-v350/work/decompiled || true
+          echo '===== HARD ISOLATION CONTEXT ====='
+          grep -RIn -B 80 -A 180 "BETTER-SLIME-HARD-ISOLATION" elin-v350/work/decompiled || true
+          echo '===== POST DEATH REGISTRATION CONTEXT ====='
+          grep -RIn -B 80 -A 140 "PostDeathBonusPatch" elin-v350/work/decompiled | head -n 600 || true
+      - name: Upload decompile snapshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: elin-v349-decompiled
+          path: elin-v350/work/decompiled
+          retention-days: 1
